@@ -25,12 +25,14 @@ export const GithubProvider = ({children}) => {
         setLoading();
         const params = new URLSearchParams({
             q:text,
-        })
+        });
+
         const response = await fetch(`${GITHUB_URL}/search/users?${params}`,{
             headers:{
                 Authorization: `token ${GITHUB_TOKEN}`,
             }
         });
+
         // From the opbject returned, destructure to get the items array.
         const {items} = await response.json()
         dispatch({
@@ -38,12 +40,20 @@ export const GithubProvider = ({children}) => {
             payload: items,
         });
     }
+
+    const clearUsers = () => {
+        dispatch({
+            type:"CLEAR_USERS",
+        });
+    }
+
     return (
             <GithubUserContext.Provider
                 value={{
                     users: state.users,
                     isLoading: state.isLoading,
-                    searchUsers
+                    searchUsers,
+                    clearUsers,
                 }}
             >
                 {children}
