@@ -1,13 +1,11 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useContext} from 'react';
 import GithubUserContext from '../../context/GithubUserContext';
 import SpinGif from '../layout/SpinGif';
 import UserItem from './UserItem';
 
 const UserResults = () => {
-    const {isLoading, users, fetchUsers} = useContext(GithubUserContext);
-    useEffect(() => {
-        fetchUsers();
-    });
+
+    const {isLoading, users} = useContext(GithubUserContext);
 
     if(!isLoading){
         return (
