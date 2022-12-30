@@ -3,15 +3,26 @@ import GithubUserContext from '../context/GithubUserContext';
 import { useParams, Link } from 'react-router-dom';
 import { FaCodepen, FaStore, FaUserFriends, FaUsers } from 'react-icons/fa';
 import SpinGif from '../components/layout/SpinGif';
+import RepoList from '../components/repos/RepoList';
+import {getUserAndRepos} from "../context/github/GithubActions";
 
 const User = () => {
-    const {user, getUser, isLoading} = useContext(GithubUserContext);
+    const {user, isLoading, repos, dispatch} = useContext(GithubUserContext);
 
     const params = useParams();
 
     useEffect(() => {
-        getUser(params.login);
-    });
+        dispatch({type:"SET_LOADING"});
+        const getUserData = async () => {
+            const userData = await getUserAndRepos(params.login);
+            dispatch({
+                type:"GET_USER_AND_REPOS",
+                payload: userData,
+            });
+        }
+
+        getUserData();
+    },[dispatch, params.login]);
 
     const {
         name,
@@ -178,6 +189,7 @@ const User = () => {
                     {public_gists}
                 </div>
             </div>
+            <RepoList repos={repos} />
         </div>
     )
 }
